@@ -24,6 +24,7 @@ class Prestation extends Model
         'date3',
         'date4',
         'adress',
+        'status'
     ];
 
     public function user()

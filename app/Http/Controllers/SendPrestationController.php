@@ -36,7 +36,7 @@ class SendPrestationController extends Controller
         'surface' => 'required|numeric',
         'total' => 'required|numeric',
         'date1' => 'required|date_format:Y-m-d h:i A',
-        'address' => 'required|string',
+        'adress' => 'nullable|string',
         'date2' => 'nullable|date_format:Y-m-d h:i A',
         'date3' => 'nullable|date_format:Y-m-d h:i A',
         'date4' => 'nullable|date_format:Y-m-d h:i A',
@@ -51,6 +51,7 @@ class SendPrestationController extends Controller
     $sendPrestation = SendPrestation::create($validated);
 
     return response()->json(['success' => true, 'data' => $sendPrestation], 201);
+
 }
 
 
@@ -89,5 +90,6 @@ class SendPrestationController extends Controller
 
         return response()->json(null, 204);
     }
+    
 }
 

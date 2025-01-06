@@ -21,7 +21,7 @@ class SendPrestation extends Model
         'date2',
         'date3',
         'date4',
-        'address',
+        'adress',
     ];
 
     

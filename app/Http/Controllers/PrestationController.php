@@ -16,148 +16,106 @@ class PrestationController extends Controller
         return response()->json(Prestation::all(), 200);
     }
 
-    
-    // public function store(Request $request)
-    // {
-    
-    //     $validated = $request->validate([
-    //         'user_id' => 'required|exists:users,id',
-    //         'title' => 'required|string|max:255',
-    //         'prix' => 'required|numeric',
-    //         'description' => 'nullable|string',
-    //         'surface' => 'required|integer',
-    //         'date1' => 'required|date_format:Y-m-d h:iA', 
-    //         'date2' => 'nullable|date_format:Y-m-d h:iA', 
-    //         'date3' => 'nullable|date_format:Y-m-d h:iA', 
-    //         'date4' => 'nullable|date_format:Y-m-d h:iA',
-    //         'adress' => 'required|string|max:255',
-    //     ]);
-
-    //     // Convert dates using Carbon to MySQL format (Y-m-d H:i:s)
-    //     $validated['date1'] = Carbon::createFromFormat('Y-m-d h:iA', $validated['date1'])->format('Y-m-d H:i:s');
-    //     $validated['date2'] = $validated['date2'] ? Carbon::createFromFormat('Y-m-d h:iA', $validated['date2'])->format('Y-m-d H:i:s') : null;
-    //     $validated['date3'] = $validated['date3'] ? Carbon::createFromFormat('Y-m-d h:iA', $validated['date3'])->format('Y-m-d H:i:s') : null;
-    //     $validated['date4'] = $validated['date4'] ? Carbon::createFromFormat('Y-m-d h:iA', $validated['date4'])->format('Y-m-d H:i:s') : null;
-
-      
-    //     $prestation = Prestation::create($validated);
-
-        
-    //     return response()->json($prestation, 201);
-    // }
-
+  
 
     public function store(Request $request)
-    {
-        // Log the incoming request data
-        Log::info('Incoming request data:', $request->all());
+{
+    // Log the incoming request data
+    Log::info('Incoming request data:', $request->all());
 
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'title' => 'required|string|max:255',
-            'prix' => 'required|numeric',
-            'description' => 'nullable|string',
-            'surface' => 'required|integer',
-            'date1' => 'required|date_format:Y-m-d h:iA', 
-            'date2' => 'nullable|date_format:Y-m-d h:iA', 
-            'date3' => 'nullable|date_format:Y-m-d h:iA', 
-            'date4' => 'nullable|date_format:Y-m-d h:iA',
-            'adress' => 'required|string|max:255',
-        ]);
+    // Validate the incoming data
+    $validated = $request->validate([
+        'user_id' => 'required|exists:users,id',
+        'title' => 'required|string|max:255',
+        'prix' => 'required|numeric',
+        'description' => 'nullable|string',
+        'surface' => 'required|integer',
+        'date1' => 'required|date_format:Y-m-d h:iA', // 12-hour format (AM/PM)
+        'date2' => 'nullable|date_format:Y-m-d h:iA',
+        'date3' => 'nullable|date_format:Y-m-d h:iA',
+        'date4' => 'nullable|date_format:Y-m-d h:iA',
+        'adress' => 'required|string|max:255',
+    ]);
 
-        // Log the validated data
-        Log::info('Validated data:', $validated);
+    // Log the validated data
+    Log::info('Validated data:', $validated);
 
-        // Log the dates before conversion
-        Log::info('Before date conversion:', [
-            'date1' => $validated['date1'],
-            'date2' => $validated['date2'],
-            'date3' => $validated['date3'],
-            'date4' => $validated['date4'],
-        ]);
+    // Log the dates before conversion for debugging
+    Log::info('Before date conversion:', [
+        'date1' => $validated['date1'],
+        'date2' => $validated['date2'],
+        'date3' => $validated['date3'],
+        'date4' => $validated['date4'],
+    ]);
 
-        // Convert dates using Carbon to MySQL format (Y-m-d H:i:s)
-        if (isset($validated['date1'])) {
-            Log::info('Converting date1:', ['original' => $validated['date1']]);
-            $validated['date1'] = Carbon::createFromFormat('Y-m-d h:iA', $validated['date1'])->format('Y-m-d H:i:s');
-            Log::info('Converted date1:', ['converted' => $validated['date1']]);
+    // Convert dates using Carbon to MySQL format (Y-m-d H:i:s)
+    foreach (['date1', 'date2', 'date3', 'date4'] as $dateField) {
+        if (isset($validated[$dateField])) {
+            try {
+                Log::info("Converting $dateField:", ['original' => $validated[$dateField]]);
+                $validated[$dateField] = Carbon::createFromFormat('Y-m-d h:iA', $validated[$dateField])->format('Y-m-d H:i:s');
+                Log::info("Converted $dateField:", ['converted' => $validated[$dateField]]);
+            } catch (\Exception $e) {
+                // If date conversion fails, log the error and return a response with error message
+                Log::error("Error parsing date for $dateField", ['error' => $e->getMessage()]);
+                return response()->json(['error' => "Invalid date format for $dateField."], 400);
+            }
         }
-        
-        if (isset($validated['date2'])) {
-            Log::info('Converting date2:', ['original' => $validated['date2']]);
-            $validated['date2'] = Carbon::createFromFormat('Y-m-d h:iA', $validated['date2'])->format('Y-m-d H:i:s');
-            Log::info('Converted date2:', ['converted' => $validated['date2']]);
-        }
-
-        if (isset($validated['date3'])) {
-            Log::info('Converting date3:', ['original' => $validated['date3']]);
-            $validated['date3'] = Carbon::createFromFormat('Y-m-d h:iA', $validated['date3'])->format('Y-m-d H:i:s');
-            Log::info('Converted date3:', ['converted' => $validated['date3']]);
-        }
-
-        if (isset($validated['date4'])) {
-            Log::info('Converting date4:', ['original' => $validated['date4']]);
-            $validated['date4'] = Carbon::createFromFormat('Y-m-d h:iA', $validated['date4'])->format('Y-m-d H:i:s');
-            Log::info('Converted date4:', ['converted' => $validated['date4']]);
-        }
-
-        // Create the Prestation record
-        $prestation = Prestation::create($validated);
-
-        // Log the created Prestation data
-        Log::info('Created Prestation:', $prestation->toArray());
-
-        return response()->json($prestation, 201);
     }
+
+    // Create the Prestation record with validated and converted data
+    $prestation = Prestation::create($validated);
+
+    // Log the created Prestation data
+    Log::info('Created Prestation:', $prestation->toArray());
+
+    // Return success response with created prestation data
+    return response()->json($prestation, 201);
+}
 
 
     
-    public function show($id)
-    {
-        $prestation = Prestation::find($id);
+    public function show($user_id)
+{
+    // Find the prestation by user_id, not the primary key (id)
+    $prestation = Prestation::where('user_id', $user_id)->get();
 
-        if (!$prestation) {
-            return response()->json(['message' => 'Prestation not found'], 404);
-        }
-
-        return response()->json($prestation, 200);
+    if (!$prestation) {
+        return response()->json(['message' => 'Prestation not found'], 404);
     }
 
+    return response()->json($prestation, 200);
+}
+public function getVist($vistid)
+{
+    // Find the prestation by vistid (assuming 'vistid' is a valid column)
+    $prestation = Prestation::where('id', $vistid)->first();  // Use 'first()' to get a single record
+
+    if (!$prestation) {
+        return response()->json(['message' => 'Prestation not found'], 404);
+    }
+
+    return response()->json($prestation, 200);
+}
+
+
     
+
     public function update(Request $request, $id)
-    {
-        $prestation = Prestation::find($id);
+{
+    // Log the incoming ID
+    Log::info("Updating Prestation with ID: $id");
 
-        if (!$prestation) {
-            return response()->json(['message' => 'Prestation not found'], 404);
-        }
+    // Find the Prestation by ID
+    $prestation = Prestation::find($id);
 
-      
-        $validated = $request->validate([
-            'user_id' => 'sometimes|exists:users,id',
-            'title' => 'sometimes|string|max:255',
-            'prix' => 'sometimes|numeric',
-            'description' => 'nullable|string',
-            'surface' => 'sometimes|integer',
-            'date1' => 'required|date_format:Y-m-d h:iA', 
-            'date2' => 'nullable|date_format:Y-m-d h:iA', 
-            'date3' => 'nullable|date_format:Y-m-d h:iA', 
-            'date4' => 'nullable|date_format:Y-m-d h:iA', 
-            'adress' => 'sometimes|string|max:255',
-        ]);
-
-      // Convert dates using Carbon to MySQL format (Y-m-d H:i:s)
-        $validated['date1'] = Carbon::createFromFormat('Y-m-d h:iA', $validated['date1'])->format('Y-m-d H:i:s');
-        $validated['date2'] = $validated['date2'] ? Carbon::createFromFormat('Y-m-d h:iA', $validated['date2'])->format('Y-m-d H:i:s') : null;
-        $validated['date3'] = $validated['date3'] ? Carbon::createFromFormat('Y-m-d h:iA', $validated['date3'])->format('Y-m-d H:i:s') : null;
-        $validated['date4'] = $validated['date4'] ? Carbon::createFromFormat('Y-m-d h:iA', $validated['date4'])->format('Y-m-d H:i:s') : null;
-
-        
-        $prestation->update($validated);
-
-      
-        return response()->json($prestation, 200);
+    if (!$prestation) {
+        Log::warning("Prestation with ID: $id not found.");
+        return response()->json(['message' => 'Prestation not found'], 404);
     }
+
+    // Continue with the update logic here...
+}
 
     
     public function destroy($id)
