@@ -20,6 +20,7 @@ class CreateTechniciensTable extends Migration
             $table->string('telephone'); // رقم الهاتف
             $table->boolean('disponible')->default(true); // متاح أو غير متاح
             $table->string('specialite');
+            $table->string('url_calendar', 255)->nullable();
             $table->timestamps(); // وقت الإنشاء والتحديث
         });
     }

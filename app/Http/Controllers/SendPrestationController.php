@@ -15,17 +15,17 @@ class SendPrestationController extends Controller
         return response()->json($sendPrestations);
     }
 
-    public function show($id)
-    {
-        $sendPrestation = SendPrestation::findOrFail($id);
-        $user = User::find($sendPrestation->user_id);
-        $userName = $user ? $user->name : 'غير موجود';
+    public function show()
+{
+    // استخدام Eager Loading لتحميل المستخدمين مع جميع السجلات
+    $sendPrestations = SendPrestation::with('user')->get(); // جلب جميع سجلات SendPrestation مع المستخدمين المرتبطين بها
 
-        $sendPrestation->userName = $userName;
+    return response()->json($sendPrestations);
+}
 
-        return response()->json($sendPrestation);
-    }
 
+
+    
     public function store(Request $request)
 {
     $validated = $request->validate([
@@ -37,6 +37,7 @@ class SendPrestationController extends Controller
         'total' => 'required|numeric',
         'date1' => 'required|date_format:Y-m-d h:i A',
         'adress' => 'nullable|string',
+        'telephone' => 'required|numeric',
         'date2' => 'nullable|date_format:Y-m-d h:i A',
         'date3' => 'nullable|date_format:Y-m-d h:i A',
         'date4' => 'nullable|date_format:Y-m-d h:i A',

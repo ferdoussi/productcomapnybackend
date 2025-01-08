@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PrestationController;
 use App\Http\Controllers\SendPrestationController;
 use App\Http\Controllers\TechnicienController;
+use App\Http\Controllers\PrestationTechnicienController;
 
 //PRODUCT
 Route::get('/products', [ProductController::class, 'index']);
@@ -42,6 +43,9 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 //geting all technicien
 Route::get('techniciens', [TechnicienController::class, 'getAllTechniciens']);
+// Prestations Techniciens
+Route::post('/prestations_techniciens', [PrestationTechnicienController::class, 'sendData']);
+Route::get('/prestations_techniciens/{id}', [PrestationTechnicienController::class, 'getData']); // For getting data by ID
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->datetime('date3')->nullable(); 
             $table->datetime('date4')->nullable(); 
             $table->string('adress'); 
+            $table->string('telephone');
             $table->enum('status', ['sent', 'not_sent'])->default('not_sent'); // Adding the status column
             $table->timestamps(); // created_at و updated_at
 

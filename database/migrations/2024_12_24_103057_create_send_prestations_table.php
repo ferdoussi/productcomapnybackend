@@ -22,6 +22,7 @@ return new class extends Migration
           $table->timestamp('date3')->nullable();
           $table->timestamp('date4')->nullable();
           $table->string('adress')->nullable();
+          $table->string('telephone');
           $table->timestamps();
       });
   }

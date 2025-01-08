@@ -35,6 +35,7 @@ class PrestationController extends Controller
         'date3' => 'nullable|date_format:Y-m-d h:iA',
         'date4' => 'nullable|date_format:Y-m-d h:iA',
         'adress' => 'required|string|max:255',
+        'telephone' => 'required|numeric',
     ]);
 
     // Log the validated data
