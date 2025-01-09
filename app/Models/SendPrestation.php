@@ -22,13 +22,21 @@ class SendPrestation extends Model
         'date3',
         'date4',
         'adress',
-        'telephone'
+        'telephone',
+        'status',
+        'vistID' // Add vistID to the fillable property
     ];
 
     // العلاقة مع نموذج User
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    // العلاقة مع نموذج Prestation
+    public function prestation()
+    {
+        return $this->belongsTo(Prestation::class, 'id'); // Assuming 'vistID' is the foreign key
     }
 
     // إضافة الخاصية userName ديناميكيًا

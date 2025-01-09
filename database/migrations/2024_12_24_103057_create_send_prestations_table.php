@@ -23,7 +23,11 @@ return new class extends Migration
           $table->timestamp('date4')->nullable();
           $table->string('adress')->nullable();
           $table->string('telephone');
+          $table->string('status')->default('Encour'); 
           $table->timestamps();
+             
+        // Add vistID column referencing the prestation table
+        $table->foreignId('vistID')->nullable()->constrained('prestations')->onDelete('cascade');
       });
   }
   

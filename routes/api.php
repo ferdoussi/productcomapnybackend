@@ -8,7 +8,7 @@ use App\Http\Controllers\PrestationController;
 use App\Http\Controllers\SendPrestationController;
 use App\Http\Controllers\TechnicienController;
 use App\Http\Controllers\PrestationTechnicienController;
-
+use App\Http\Controllers\PrestationNotSendController;
 //PRODUCT
 Route::get('/products', [ProductController::class, 'index']);
 Route::post('/products', [ProductController::class, 'store']);
@@ -46,6 +46,12 @@ Route::get('techniciens', [TechnicienController::class, 'getAllTechniciens']);
 // Prestations Techniciens
 Route::post('/prestations_techniciens', [PrestationTechnicienController::class, 'sendData']);
 Route::get('/prestations_techniciens/{id}', [PrestationTechnicienController::class, 'getData']); // For getting data by ID
+
+// For API route in routes/api.php
+Route::post('prestation-notSend', [PrestationNotSendController::class, 'store']);
+Route::get('/prestation-notSend/{user_id}', [PrestationNotSendController::class, 'show']);
+
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

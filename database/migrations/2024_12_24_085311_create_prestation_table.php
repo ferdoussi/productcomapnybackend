@@ -13,25 +13,25 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('prestation', function (Blueprint $table) {
-            $table->id(); 
-            $table->unsignedBigInteger('user_id'); 
-            $table->string('title'); 
-            $table->decimal('prix', 10, 2); 
-            $table->text('description')->nullable(); 
-            $table->integer('surface'); 
-            $table->datetime('date1');
-            $table->datetime('date2')->nullable();
-            $table->datetime('date3')->nullable(); 
-            $table->datetime('date4')->nullable(); 
-            $table->string('adress'); 
-            $table->string('telephone');
-            $table->enum('status', ['sent', 'not_sent'])->default('not_sent'); // Adding the status column
-            $table->timestamps(); // created_at و updated_at
-
-          
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-        });
+      Schema::create('prestations', function (Blueprint $table) {
+        $table->id(); 
+        $table->unsignedBigInteger('user_id'); 
+        $table->string('title'); 
+        $table->decimal('prix', 10, 2); 
+        $table->text('description')->nullable(); 
+        $table->integer('surface'); 
+        $table->datetime('date1');
+        $table->datetime('date2')->nullable();
+        $table->datetime('date3')->nullable(); 
+        $table->datetime('date4')->nullable(); 
+        $table->string('adress'); 
+        $table->string('telephone');
+        $table->enum('status')->default('Encour'); // إضافة العمود status
+        $table->timestamps(); // created_at و updated_at
+    
+        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+    });
+    
     }
 
     /**
