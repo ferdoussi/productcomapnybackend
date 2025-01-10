@@ -6,6 +6,7 @@ use App\Models\Prestation;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use App\Models\PrestationNotSend;
 
 
 class PrestationController extends Controller
@@ -119,18 +120,26 @@ public function getVist($vistid)
 }
 
     
-    public function destroy($id)
-    {
-        $prestation = Prestation::find($id);
+public function destroy($id)
+{
+    // Find the Prestation record
+    $prestation = Prestation::find($id);
 
-        if (!$prestation) {
-            return response()->json(['message' => 'Prestation not found'], 404);
-        }
-
-        
-        $prestation->delete();
-
-        
-        return response()->json(['message' => 'Prestation deleted successfully'], 200);
+    if (!$prestation) {
+        return response()->json(['message' => 'Prestation not found'], 404);
     }
+
+    // Delete the corresponding record from PrestationNotSend
+    $prestationNotSend = PrestationNotSend::where('vistID', $id)->first();
+
+    if ($prestationNotSend) {
+        $prestationNotSend->delete();
+    }
+
+    // Delete the Prestation record
+    $prestation->delete();
+
+    return response()->json(['message' => 'Prestation and related data deleted successfully'], 200);
+}
+
 }

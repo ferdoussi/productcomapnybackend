@@ -28,7 +28,7 @@ class CreatePrestationNotSendTable extends Migration
             $table->string('adress');
             $table->timestamps();
             $table->string('telephone');
-            $table->string('status')->default('Encour');
+            $table->string('status')->default('active');
             $table->unsignedBigInteger('vistID'); // Foreign key or a unique identifier
             
             // Optional: Add foreign key constraint if needed

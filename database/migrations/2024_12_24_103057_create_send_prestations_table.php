@@ -23,7 +23,7 @@ return new class extends Migration
           $table->timestamp('date4')->nullable();
           $table->string('adress')->nullable();
           $table->string('telephone');
-          $table->string('status')->default('Encour'); 
+          $table->string('status')->default('active'); 
           $table->timestamps();
              
         // Add vistID column referencing the prestation table
