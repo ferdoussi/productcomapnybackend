@@ -17,13 +17,36 @@ class SendPrestationController extends Controller
         return response()->json($sendPrestations);
     }
 
-    public function show()
-    {
-        // استخدام Eager Loading لتحميل المستخدمين مع جميع السجلات
-        $sendPrestations = SendPrestation::with(['user', 'prestation'])->get(); // جلب جميع سجلات SendPrestation مع المستخدمين المرتبطين بها
+    public function show($vistID)
+{
+    \Log::info("Received vistID: " . $vistID);  // Log the vistID
 
-        return response()->json($sendPrestations);
-    }
+    // Fetch the prestation using the given vistID
+    $sendPrestations = SendPrestation::with(['user', 'prestation'])
+                                     ->where('vistID', $vistID)  // Filter by vistID
+                                     ->get();
+
+    \Log::info("Fetched prestations: ", $sendPrestations->toArray()); // Log the result
+
+    return response()->json($sendPrestations);
+}
+
+public function showByUser($userId)
+{
+    \Log::info("Received user_id: " . $userId);  // Log the user_id
+
+    // Fetch the prestation using the given user_id
+    $sendPrestations = SendPrestation::with(['user', 'prestation'])
+                                     ->where('user_id', $userId)  // Filter by user_id
+                                     ->get();
+
+    \Log::info("Fetched prestations for user_id " . $userId . ": ", $sendPrestations->toArray()); // Log the result
+
+    return response()->json($sendPrestations);
+}
+
+
+    
 
     public function store(Request $request)
     {

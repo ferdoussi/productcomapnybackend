@@ -34,7 +34,7 @@ Route::delete('prestations/{id}', [PrestationController::class, 'destroy']);
 
 //SEND PRESTATION
 Route::resource('send-prestations', SendPrestationController::class);
-
+Route::get('/send-prestation/{userId}', [SendPrestationController::class, 'showByUser']);
 //lOGIN
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {

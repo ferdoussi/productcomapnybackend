@@ -40,23 +40,23 @@ class PrestationTechnicienController extends Controller
         ], 201);
     }
 
-    public function getData($id)
-    {
-        // Find the specific record by its ID
-        $prestationTechnicien = PrestationTechnicien::find($id);
+    public function getData($userId)
+{
+    // Find the specific record by its user_id
+    $prestationTechnicien = PrestationTechnicien::where('user_id', $userId)->first();
 
-        if (!$prestationTechnicien) {
-            // If not found, return a 404 error
-            return response()->json([
-                'message' => 'Record not found',
-            ], 404);
-        }
-
-        // Return the data of the found record
+    if (!$prestationTechnicien) {
+        // If not found, return a 404 error
         return response()->json([
-            // 'message' => 'Data retrieved successfully',
-            'data' => $prestationTechnicien,
-        ], 200);
+            'message' => 'Record not found',
+        ], 404);
     }
+
+    // Return the data of the found record
+    return response()->json([
+        'data' => $prestationTechnicien,
+    ], 200);
+}
+
     
 }
