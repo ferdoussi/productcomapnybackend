@@ -26,6 +26,7 @@ class PrestationTechnicien extends Model
         'date_prestation',
         'userName',
         'user_id', // Make sure user_id is mass-assignable
+        'vistID', // Add vistID here
     ];
 
     /**
@@ -34,5 +35,10 @@ class PrestationTechnicien extends Model
     public function technicien()
     {
         return $this->belongsTo(Technicien::class, 'user_id');
+    }
+      // العلاقة مع نموذج Prestation
+    public function prestation()
+    {
+        return $this->belongsTo(Prestation::class, 'id'); // Assuming 'vistID' is the foreign key
     }
 }

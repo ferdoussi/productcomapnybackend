@@ -15,6 +15,7 @@ class CreatePrestationsTechniciensTable extends Migration
             $table->decimal('surface', 8, 2); // for surface, adjust as needed
             $table->string('telephone');
             $table->string('adress');
+            $table->unsignedBigInteger('vistID')->nullable(); // Add the vistID column
             $table->text('description');
             $table->date('date_prestation');
             $table->string('userName');
@@ -25,7 +26,7 @@ class CreatePrestationsTechniciensTable extends Migration
             $table->foreign('user_id')->references('id')->on('techniciens')->onDelete('cascade');
         });
     }
-
+ 
     public function down()
     {
         Schema::dropIfExists('prestations_techniciens');
