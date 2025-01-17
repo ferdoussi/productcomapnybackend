@@ -32,6 +32,7 @@ class UserSeeder extends Seeder
       //         'specialite' => 'Menage',
       //     ]);
       // }
+      
     //   if (!Technicien::where('email', 'user10@example.com')->exists()) {
     //     Technicien::create([
     //         'nom' => 'anas',

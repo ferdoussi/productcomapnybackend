@@ -7,19 +7,21 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\SendPrestation;
 use App\Models\Technicien;
+use App\Models\PrestationNotSend;
+use App\Models\Prestation;
 class PrestationTechnicienController extends Controller
 {
     // Add the sendData function
     public function sendData(Request $request)
     {
-         
-      try {
-        $datePrestation = \Carbon\Carbon::parse($request->input('date_prestation'))->format('Y-m-d H:i:s');
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Invalid date format'], 400);
-    }
+        try {
+            // Parse and normalize the 'date_prestation' input
+            $datePrestation = \Carbon\Carbon::parse($request->input('date_prestation'))->format('Y-m-d H:i:s');
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Invalid date format'], 400);
+        }
     
-        // Validate the incoming request data (including vistID)
+        // Validate the incoming request data
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'prix' => 'required|numeric',
@@ -33,40 +35,55 @@ class PrestationTechnicienController extends Controller
             'vistID' => 'nullable|exists:prestation,id', // Ensure vistID references the prestation table
         ]);
     
-        // Include the normalized date_prestation in the validated data
+        // Include the normalized 'date_prestation' and set default status
         $validated['date_prestation'] = $datePrestation;
+        $validated['status'] = 'en cours';
     
-        // Add the status of 'en cours' to the validated data
-        $validated['status'] = 'en cours';  // Set the status to 'en cours'
-    
-        // Fetch the technicien and update their 'disponible' field if needed
+        // Fetch the technicien and update their 'disponible' field
         $technicien = Technicien::find($validated['user_id']);
-        if ($technicien) {
-            $technicien->disponible = false;
-            $technicien->save();
-        } else {
+        if (!$technicien) {
             return response()->json(['error' => 'Technicien not found'], 404);
         }
+        $technicien->disponible = false;
+        $technicien->save();
     
-        // Create a new PrestationTechnicien record including vistID
+        // Create a new PrestationTechnicien record
         $prestationTechnicien = PrestationTechnicien::create($validated);
     
-        // Update PrestationNotSend table
-        $prestationNotSend = SendPrestation::where('vistID', $validated['vistID'])->first();
-        if ($prestationNotSend) {
-            $prestationNotSend->status = 'planifier';  // Change the status to 'planifier'
-            $prestationNotSend->save();
+        // Update or create the PrestationNotSend entry
+        $prestationNotSend = PrestationNotSend::updateOrCreate(
+            ['vistID' => $validated['vistID']], // Match by vistID
+            [
+                'title' => $validated['title'],
+                'prix' => $validated['prix'],
+                'surface' => $validated['surface'],
+                'telephone' => $validated['telephone'],
+                'adress' => $validated['adress'],
+                'description' => $validated['description'],
+                'date_prestation' => $validated['date_prestation'],
+                'status' => 'planifier', // Set the status to 'planifier'
+            ]
+        );
+    
+        // Update the Prestation table
+        $prestation = Prestation::find($validated['vistID']);
+        if ($prestation) {
+            $prestation->status = 'planifier';
+            $prestation->save();
         } else {
-            // Handle case where PrestationNotSend is not found
-            return response()->json(['error' => 'PrestationNotSend not found'], 404);
+            return response()->json(['error' => 'Prestation not found'], 404);
         }
     
         // Return a response
         return response()->json([
             'message' => 'Data sent successfully',
-            'data' => $prestationTechnicien,
+            'data' => [
+                'prestationTechnicien' => $prestationTechnicien,
+                'prestationNotSend' => $prestationNotSend,
+            ],
         ], 201);
     }
+    
     
     
 
@@ -75,12 +92,12 @@ class PrestationTechnicienController extends Controller
         // Find all records by user_id
         $prestationTechniciens = PrestationTechnicien::where('user_id', $userId)->get();
     
-        if ($prestationTechniciens->isEmpty()) {
-            // If no records are found, return a 404 error
-            return response()->json([
-                'message' => 'No records found',
-            ], 404);
-        }
+        // if ($prestationTechniciens->isEmpty()) {
+        //     // If no records are found, return a 404 error
+        //     return response()->json([
+        //         'message' => 'No records found',
+        //     ], 404);
+        // }
     
         // Return the data of all found records
         return response()->json([
