@@ -27,6 +27,7 @@ class PrestationTechnicien extends Model
         'userName',
         'user_id', // Make sure user_id is mass-assignable
         'vistID', // Add vistID here
+        'status'
     ];
 
     /**
@@ -36,7 +37,7 @@ class PrestationTechnicien extends Model
     {
         return $this->belongsTo(Technicien::class, 'user_id');
     }
-      // العلاقة مع نموذج Prestation
+    // Relationship with Prestation model
     public function prestation()
     {
         return $this->belongsTo(Prestation::class, 'id'); // Assuming 'vistID' is the foreign key

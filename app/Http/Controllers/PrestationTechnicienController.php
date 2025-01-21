@@ -37,7 +37,7 @@ class PrestationTechnicienController extends Controller
     
         // Include the normalized 'date_prestation' and set default status
         $validated['date_prestation'] = $datePrestation;
-        $validated['status'] = 'en cours';
+        $validated['status'] = 'planifier';
     
         // Fetch the technicien and update their 'disponible' field
         $technicien = Technicien::find($validated['user_id']);
@@ -74,15 +74,16 @@ class PrestationTechnicienController extends Controller
             return response()->json(['error' => 'Prestation not found'], 404);
         }
     
-        // Return a response
-        return response()->json([
-            'message' => 'Data sent successfully',
-            'data' => [
-                'prestationTechnicien' => $prestationTechnicien,
-                'prestationNotSend' => $prestationNotSend,
-            ],
-        ], 201);
+        // Update or create the SendPrestation entry
+        $sendPrestation = SendPrestation::updateOrCreate(
+            ['vistID' => $validated['vistID']], // Look for existing record by vistID
+            ['status' => 'planifier']           // If not found, create with status 'planifier'
+        );
+    
+        // Return a success response
+        return response()->json(['message' => 'Data sent successfully', 'data' => $sendPrestation], 200);
     }
+    
     
     
     

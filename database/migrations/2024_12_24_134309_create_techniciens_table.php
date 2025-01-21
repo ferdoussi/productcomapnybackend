@@ -10,18 +10,18 @@ class CreateTechniciensTable extends Migration
     public function up()
     {
         Schema::create('techniciens', function (Blueprint $table) {
-            $table->id(); // عمود ID تلقائي
-            $table->string('nom'); // الاسم
-            $table->string('prenom'); // اللقب
-            $table->string('email')->unique(); // البريد الإلكتروني
+            $table->id(); 
+            $table->string('nom'); 
+            $table->string('prenom'); 
+            $table->string('email')->unique(); 
             $table->string('password');
-            $table->string('role'); // الدور
-            $table->text('address'); // العنوان
-            $table->string('telephone'); // رقم الهاتف
-            $table->boolean('disponible')->default(true); // متاح أو غير متاح
+            $table->string('role'); 
+            $table->text('address'); 
+            $table->string('telephone'); 
+            $table->boolean('disponible')->default(true); 
             $table->string('specialite');
             $table->string('url_calendar', 255)->nullable();
-            $table->timestamps(); // وقت الإنشاء والتحديث
+            $table->timestamps(); 
         });
     }
 

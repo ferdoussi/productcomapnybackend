@@ -19,6 +19,7 @@ class CreatePrestationsTechniciensTable extends Migration
             $table->text('description');
             $table->date('date_prestation');
             $table->string('userName');
+            $table->string('status')->default('active'); 
             $table->unsignedBigInteger('user_id'); // Foreign key column
             $table->timestamps(); // for created_at and updated_at
 

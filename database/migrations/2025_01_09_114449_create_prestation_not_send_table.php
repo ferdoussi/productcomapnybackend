@@ -6,11 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreatePrestationNotSendTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+
     public function up()
     {
         Schema::create('prestation_notSend', function (Blueprint $table) {
@@ -36,11 +32,6 @@ class CreatePrestationNotSendTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('prestation_notSend');

@@ -6,11 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+    
     public function up()
     {
       Schema::create('prestations', function (Blueprint $table) {
@@ -26,7 +22,7 @@ return new class extends Migration
         $table->datetime('date4')->nullable(); 
         $table->string('adress'); 
         $table->string('telephone');
-        $table->enum('status')->default('active'); // إضافة العمود status
+        $table->enum('status')->default('active');// Add status column
         $table->timestamps(); // created_at و updated_at
     
         $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
@@ -34,11 +30,7 @@ return new class extends Migration
     
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+    
     public function down()
     {
         Schema::dropIfExists('prestation');
