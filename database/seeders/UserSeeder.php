@@ -18,6 +18,14 @@ class UserSeeder extends Seeder
       //         'role'=> 'client'
       //     ]);
       // }
+      if (!User::where('email', 'user13@example.com')->exists()) {
+          User::create([
+              'name' => 'Anas ferdoussi',
+              'email' => 'user3@example.com',
+              'password' => Hash::make('password12345'), //method hashing password
+              'role'=> 'superviseur'
+          ]);
+      }
   
       // if (!Technicien::where('email', 'user2@example.com')->exists()) {
       //     Technicien::create([
@@ -46,19 +54,19 @@ class UserSeeder extends Seeder
     //         'specialite' => 'elec',
     //     ]);
     // }
-    if (!Technicien::where('email', 'user4@example.com')->exists()) {
-      Technicien::create([
-          'nom' => 'anas',
-          'prenom' => 'ferdoussi',
-          'address' => 'casablancaa',
-          'telephone' => '15657842',
-          'disponible' => true,
-          'email' => 'user4@example.com',
-          'password' => Hash::make('password12345678'), //method hashing password
-          'role'=> 'technicien',
-          'specialite' => 'elec',
-      ]);
-  }
+  //   if (!Technicien::where('email', 'user4@example.com')->exists()) {
+  //     Technicien::create([
+  //         'nom' => 'anas',
+  //         'prenom' => 'ferdoussi',
+  //         'address' => 'casablancaa',
+  //         'telephone' => '15657842',
+  //         'disponible' => true,
+  //         'email' => 'user4@example.com',
+  //         'password' => Hash::make('password12345678'), //method hashing password
+  //         'role'=> 'technicien',
+  //         'specialite' => 'elec',
+  //     ]);
+  // }
   
       
   }
