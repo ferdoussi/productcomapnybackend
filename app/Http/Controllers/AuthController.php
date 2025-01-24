@@ -57,6 +57,7 @@ class AuthController extends Controller
               return response()->json(['message' => 'Invalid credentials'], 401);
           }
       }
+      
   
       Log::warning('Email not found in any table: ' . $request->email);
       return response()->json(['message' => 'Email not found'], 404);
@@ -74,19 +75,4 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out successfully']);
     }
 
-    /**
-     * Retrieve the currently authenticated user.
-     */
-    public function getUser(Request $request)
-    {
-        // Log user information retrieval
-        Log::info('User details retrieved: ' . $request->user()->email);
-
-        return response()->json($request->user());
-    }
-    public function show($id)
-    {
-        $user = User::find($id); // Retrieve the user from the database
-        return view('user.show', ['user' => $user]); // Pass user to view
-    }
 }

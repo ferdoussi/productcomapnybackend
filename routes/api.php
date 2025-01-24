@@ -39,7 +39,7 @@ Route::get('/send-prestation/{userId}', [SendPrestationController::class, 'showB
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/user', [AuthController::class, 'getUser']);
+    Route::get('/user/{id}', [AuthController::class, 'show']);
 });
 //geting all technicien
 Route::get('techniciens', [TechnicienController::class, 'getAllTechniciens']);

@@ -84,9 +84,6 @@ class PrestationTechnicienController extends Controller
         return response()->json(['message' => 'Data sent successfully', 'data' => $sendPrestation], 200);
     }
     
-    
-    
-    
 
     public function getData($userId)
     {
@@ -106,6 +103,5 @@ class PrestationTechnicienController extends Controller
         ], 200);
     }
     
-
     
 }

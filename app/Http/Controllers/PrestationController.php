@@ -103,21 +103,21 @@ public function getVist($vistid)
 
     
 
-    public function update(Request $request, $id)
-{
-    // Log the incoming ID
-    Log::info("Updating Prestation with ID: $id");
+//     public function update(Request $request, $id)
+// {
+//     // Log the incoming ID
+//     Log::info("Updating Prestation with ID: $id");
 
-    // Find the Prestation by ID
-    $prestation = Prestation::find($id);
+//     // Find the Prestation by ID
+//     $prestation = Prestation::find($id);
 
-    if (!$prestation) {
-        Log::warning("Prestation with ID: $id not found.");
-        return response()->json(['message' => 'Prestation not found'], 404);
-    }
+//     if (!$prestation) {
+//         Log::warning("Prestation with ID: $id not found.");
+//         return response()->json(['message' => 'Prestation not found'], 404);
+//     }
 
-    // Continue with the update logic here...
-}
+//     // Continue with the update logic here...
+// }
 
     
 public function destroy($id)
