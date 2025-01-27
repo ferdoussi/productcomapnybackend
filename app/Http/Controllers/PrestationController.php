@@ -101,8 +101,6 @@ public function getVist($vistid)
 }
 
 
-    
-
 //     public function update(Request $request, $id)
 // {
 //     // Log the incoming ID
